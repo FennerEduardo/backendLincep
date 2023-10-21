@@ -3,7 +3,12 @@ const Token = require('../models/Token');
 const User = require('../models/User');
 
 const authMiddleware = async (req, res, next) => {
-    const token = req?.headers?.authorization.split(' ')[1];
+
+    const authHeader = req?.headers?.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Debe estar autenticado para realizar esta consulta.' });
+    }
+    const token = authHeader.split(' ')[1];
     if (!token) {
         return res.status(401).json({ message: 'Acceso no autorizado. Token no proporcionado.' });
     }

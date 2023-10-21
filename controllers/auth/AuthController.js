@@ -79,12 +79,12 @@ const login = async (req, res) => {
             }
 
             const token = jwt.sign({ id: user.id, email: user.email }, process.env.APP_SECRET_KEY_AUTH, {
-                expiresIn: '1h' 
+                expiresIn: '1h'
             });
 
             Token.create({ user_id: user.id, token: token, expires_in: 3600 });
 
-            res.status(200).json({ token: token, expiresIn: 3600 }); 
+            res.status(200).json({ token: token, expiresIn: 3600 });
         });
     } catch (error) {
         console.error('Error en el inicio de sesión:', error);
@@ -93,7 +93,11 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    const token = req?.headers?.authorization?.split(' ')[1];
+    const authHeader = req?.headers?.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Debe estar autenticado para realizar esta consulta.' });
+    }
+    const token = authHeader.split(' ')[1];
     try {
         const storedToken = await Token.findOne({ where: { token: token } });
         if (!storedToken) {
