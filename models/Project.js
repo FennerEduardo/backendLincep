@@ -7,24 +7,23 @@ const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   dialect: 'mysql'
 });
 
-const User = sequelize.define('User', {
+const Project = sequelize.define('Project', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  username: {
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  email: {
+  description: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   created_at: {
     type: DataTypes.DATE,
@@ -37,11 +36,11 @@ const User = sequelize.define('User', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  modelName: 'User',
+  modelName: 'Project',
   timestamps: true,
   createdAt: 'created_at',
   updatedAt: 'updated_at',
-  tableName: 'users',
+  tableName: 'projects',
 });
 
-module.exports = User;
+module.exports = Project;
