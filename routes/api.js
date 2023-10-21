@@ -15,6 +15,8 @@ router.route('/users/:id')
   .put(userController.updateUser)
   .delete(userController.deleteUser);
 
+router.post('/current-user', userController.getCurrentUser);
+
 router.route('/projects')
   .get(ProjectController.getAllProjects)
   .post(ProjectController.createProject);

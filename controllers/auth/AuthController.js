@@ -69,7 +69,7 @@ const login = async (req, res) => {
 
         const existingToken = await Token.findOne({ where: { user_id: user.id } });
         if (existingToken) {
-            return res.status(403).json({ message: 'El usuario ya ha iniciado sesión.', token: existingToken.token, expiresIn: 3600 });
+            return res.status(200).json({ message: 'El usuario ya ha iniciado sesión.', token: existingToken.token, expiresIn: 3600 });
         }
 
         bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -84,7 +84,7 @@ const login = async (req, res) => {
 
             Token.create({ user_id: user.id, token: token, expires_in: 3600 });
 
-            res.status(200).json({ token: token, expiresIn: 3600 });
+            res.status(200).json({ token: token, expires_n: 3600 });
         });
     } catch (error) {
         console.error('Error en el inicio de sesión:', error);

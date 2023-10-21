@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const db = require('./database/db');
@@ -8,6 +9,8 @@ const apiRouter = require('./routes/api')
 const port = process.env.PORT;
 require('./schedule/tokenCleanup');
 
+
+app.use(cors());
 // Middlewares
 // Analizar application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Token = require('../models/Token');
 
 
 const getAllUsers = async (req, res) => {
@@ -83,10 +84,24 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const { user } = req;
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getCurrentUser
 };
