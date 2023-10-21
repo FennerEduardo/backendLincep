@@ -1,9 +1,10 @@
 const  Project  = require('../models/Project');
+const User = require('../models/User');
 
 // Obtener todos los proyectos
 const getAllProjects = async (req, res) => {
     try {
-        const projects = await Project.findAll();
+        const projects = await Project.findAll({ include: User });
         res.status(200).json(projects);
     } catch (error) {
         console.error('Error al obtener proyectos:', error);
@@ -27,7 +28,7 @@ const createProject = async (req, res) => {
 const getProjectById = async (req, res) => {
     const id = req.params.id;
     try {
-        const project = await Project.findByPk(id);
+        const project = await Project.findByPk(id, { include: User });
         if (!project) {
             return res.status(404).json({ message: 'Proyecto no encontrado.' });
         }

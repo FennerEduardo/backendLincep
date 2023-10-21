@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
+const  Project  = require('../models/Project');
+
 
 const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
@@ -43,5 +45,9 @@ const User = sequelize.define('User', {
   updatedAt: 'updated_at',
   tableName: 'users',
 });
+
+// Configurar la relación entre User y Project
+User.hasMany(Project, { foreignKey: 'user_id' });
+Project.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = User;

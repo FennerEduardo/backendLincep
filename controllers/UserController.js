@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({ include: 'Projects' });
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: 'Error al obtener los usuarios' });
@@ -15,7 +15,7 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   const id = req.params.id;
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, { include: Project });
     if (user) {
       res.json(user);
     } else {
@@ -34,9 +34,9 @@ const createUser = async (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, salt);
 
     const user = await User.create({
-        username: username,
-        email: email,
-        password: hashedPassword
+      username: username,
+      email: email,
+      password: hashedPassword
     });
     res.status(201).json(user);
   } catch (err) {
