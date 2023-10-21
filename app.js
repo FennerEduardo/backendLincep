@@ -1,16 +1,30 @@
-// app.js
-const express = require('express');
 require('dotenv').config();
-const bodyParser = require('body-parser');
-const db = require('.//database/db');
-
-
+const express = require('express');
 const app = express();
+const db = require('./database/db');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const apiRouter = require('./routes/api')
+const port = process.env.PORT;
+require('./schedule/tokenCleanup');
+
+// Middlewares
+// Analizar application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Analizar application/json
 app.use(bodyParser.json());
 
-// Resto de tu código para las rutas y lógica de backend
+// Rutas de autenticación
+app.use('/auth', authRoutes);
 
-const port = process.env.PORT || 3000;
+// Rutas
+app.use('/api', apiRouter);
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+  console.log(`Example app listening on port ${port}`)
+})
