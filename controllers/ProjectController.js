@@ -1,7 +1,6 @@
 const  Project  = require('../models/Project');
 const User = require('../models/User');
 
-// Obtener todos los proyectos
 const getAllProjects = async (req, res) => {
     try {
         const projects = await Project.findAll({ include: User });
@@ -12,7 +11,6 @@ const getAllProjects = async (req, res) => {
     }
 };
 
-// Crear un nuevo proyecto
 const createProject = async (req, res) => {
     const { name, description, user_id } = req.body;
     try {
@@ -24,7 +22,7 @@ const createProject = async (req, res) => {
     }
 };
 
-// Obtener un proyecto por ID
+
 const getProjectById = async (req, res) => {
     const id = req.params.id;
     try {
@@ -39,7 +37,7 @@ const getProjectById = async (req, res) => {
     }
 };
 
-// Actualizar un proyecto por ID
+
 const updateProject = async (req, res) => {
     const id = req.params.id;
     const { name, description, user_id } = req.body;
@@ -59,7 +57,7 @@ const updateProject = async (req, res) => {
     }
 };
 
-// Eliminar un proyecto por ID
+
 const deleteProject = async (req, res) => {
     const id = req.params.id;
     try {

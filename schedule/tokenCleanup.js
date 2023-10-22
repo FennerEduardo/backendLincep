@@ -1,8 +1,7 @@
 const schedule = require('node-schedule');
-const Token = require('../models/token');
+const Token = require('../models/Token');
 
 
-// Función para eliminar tokens expirados
 const removeExpiredTokens = async () => {
     try {
         const currentTimestamp = new Date().getTime();
@@ -13,5 +12,5 @@ const removeExpiredTokens = async () => {
     }
 };
 
-// Programar la ejecución de la función de eliminación de tokens expirados una vez al día
-schedule.scheduleJob('0 0 0 0 *', removeExpiredTokens);
+
+schedule.scheduleJob('0 0 * * *', removeExpiredTokens);

@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Token = require('../models/Token');
+const Joi = require('joi');
+const Project = require('../models/Project');
 
 
 const getAllUsers = async (req, res) => {
@@ -49,15 +51,21 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const id = req.params.id;
-  const { username, email, password } = req.body;
+  const { username, email } = req.body;
+  const schema = Joi.object({
+    username: Joi.string().min(3).required(),
+    email: Joi.string().email().required()
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
   try {
     const user = await User.findByPk(id);
-    if (user) {
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(password, salt);
+    if (user) {    
       user.username = username;
-      user.email = email;
-      user.password = hashedPassword;
+      user.email = email;     
       await user.save();
       res.json(user);
     } else {
@@ -74,6 +82,7 @@ const deleteUser = async (req, res) => {
   try {
     const user = await User.findByPk(id);
     if (user) {
+      await Project.destroy({ where: { user_id: id } });
       await user.destroy();
       res.json({ message: 'Usuario eliminado correctamente' });
     } else {

@@ -1,7 +1,7 @@
 {
   "name": "backend-lincep",
   "version": "1.0.0",
-  "description": "Build backend server to Licep API",
+  "description": "Build backend server to Lincep API",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"

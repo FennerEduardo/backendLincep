@@ -6,7 +6,6 @@ const User = require('../../models/User');
 const Token = require('../../models/Token');
 
 
-// Método de registro
 const register = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -24,7 +23,6 @@ const register = async (req, res) => {
     }
 
     try {
-
         const existingUser = await User.findOne({ where: { email: email } });
         if (existingUser) {
             return res.status(400).send('El usuario ya está registrado.');
@@ -63,13 +61,13 @@ const login = async (req, res) => {
 
         const user = await User.findOne({ where: { email: email } });
         if (!user) {
-            return res.status(401).json({ message: 'Credenciales inválidas.' });
+            return res.status(401).json({ message: 'El Usuario no existe en nuestros registros' });
         }
 
 
         const existingToken = await Token.findOne({ where: { user_id: user.id } });
         if (existingToken) {
-            return res.status(200).json({ message: 'El usuario ya ha iniciado sesión.', token: existingToken.token, expiresIn: 3600 });
+            return res.status(200).json({ message: 'El usuario ya ha iniciado sesión.', token: existingToken.token, expires_in: existingToken.expires_in });
         }
 
         bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -84,7 +82,7 @@ const login = async (req, res) => {
 
             Token.create({ user_id: user.id, token: token, expires_in: 3600 });
 
-            res.status(200).json({ token: token, expires_n: 3600 });
+            res.status(200).json({ token: token, expires_in: 3600 });
         });
     } catch (error) {
         console.error('Error en el inicio de sesión:', error);
